@@ -2,8 +2,11 @@
 name = "git-nuke"
 version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+authors = ["Simon Buchan <simon.buchan.nz@gmail.com>"]
+description = "Remove all ignored files from a git repository, fast"
+license = "MIT"
+keywords = ["git", "clean", "ignore"]
+repository = "https://github.com/simonbuchan/git-nuke"
 
 [dependencies]
 anyhow = "1.0.81"
