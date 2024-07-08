@@ -120,7 +120,7 @@ impl Index {
             return Err(IndexParseError::InvalidSignature);
         }
         let version = reader.u32();
-        if !(2..=4).contains(&version) {
+        if !(2..=3).contains(&version) {
             return Err(IndexParseError::UnknownVersion(version));
         }
         let num_entries = reader.u32();
