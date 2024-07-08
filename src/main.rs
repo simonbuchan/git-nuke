@@ -20,6 +20,9 @@ struct Args {
     dry_run: bool,
 
     #[clap(short, long)]
+    all: bool,
+
+    #[clap(short, long)]
     verbose: bool,
 
     #[clap(short, long)]
@@ -78,9 +81,15 @@ struct Work {
 
 impl Work {
     fn new(context: &Context) -> Self {
+        let dir = if context.args.all {
+            context.workspace.root_dir.clone()
+        } else {
+            context.args.dir.clone()
+        };
+
         let mut ignore = GitignoreBuilder::new(&context.workspace.root_dir);
         ignore.add(context.workspace.git_dir.join("info/exclude"));
-        for dir in paths_between(&context.workspace.root_dir, &context.args.dir) {
+        for dir in paths_between(&context.workspace.root_dir, &dir) {
             ignore.add(dir.join(".gitignore"));
         }
         let mut index_paths = HashSet::new();
@@ -98,7 +107,7 @@ impl Work {
         let index_paths = std::sync::Arc::new(index_paths);
 
         Self {
-            dir: context.args.dir.clone(),
+            dir,
             ignore,
             index_paths,
         }
