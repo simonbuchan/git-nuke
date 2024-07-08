@@ -2,15 +2,26 @@
 
 ## What?
 
-`git-nuke` is a Rust binary that provides a more reliable version of `git clean -dXf` for
-Windows, though it may be useful for other platforms.
+`git-nuke` is a Rust binary that intends to provide a more reliable version of `git clean -dXf` for
+Windows, though it may still be useful for other platforms.
 
 ## How?
 
-Install with `cargo install git-nuke` and run with `git nuke` in a git working
-directory root, or passing that directory as an argument (running in a subdirectory
-probably won't do what you want, that may be addressed in a future update if anyone
-cares).
+Install with `cargo install git-nuke` and run with `git nuke` with the directory to be cleaned,
+using the current directory by default.
+
+If the directory is not the git working directory root, `git-nuke` will search for the git root and
+include parent `.gitignore` files as git does, but will only remove directories that are within
+the provided directory unless `-a / --all` is provided.
+
+It will also not remove files in the git index, unless `-i / --ignore-index` is provided. It's quite
+likely this doesn't correctly parse all the various index versions, in particular:
+
+- git index format 4 uses a form of path differencing that is not yet supported
+- the config enabling SHA-256 checksums (`extensions.objectFormat`) is also not supported yet
+  as config parsing is not yet implemented
+
+Currently, git will not create these formats by default, so it shouldn't be much of a problem yet.
 
 ## Why?
 
